@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use App\Models\Fighters;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class FighterController extends Controller
      */
     public function index()
     {
-        $fighters = Fighter::all();
+        $fighters = Fighters::all();
         return response()->json($fighters);
 
     }
@@ -22,7 +23,7 @@ class FighterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -30,7 +31,7 @@ class FighterController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**
