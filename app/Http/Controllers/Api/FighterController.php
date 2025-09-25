@@ -56,5 +56,12 @@ class FighterController extends Controller
     public function destroy(string $id)
     {
         //
+        $fighter = Fighters::find($id);
+        if(!$fighter){
+            return response() -> json(["message"=>"Le combattant ayant l'id $id n'existe pas"],404)
+        }else {
+                $fighter -> delete()
+                return response() -> json(["message"=>"Le combattant $id supprimé avec succès"])
+        }
     }
 }
