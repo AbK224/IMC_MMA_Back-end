@@ -12,7 +12,7 @@ class FighterController extends Controller
      */
     public function index()
     {
-        $fighters = Fighter::all();
+        $fighters = Fighters::all();
         return response()->json($fighters);
 
     }
@@ -22,7 +22,15 @@ class FighterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         $data = $request->validate([
+            'FirstName'=> ['required','string','max:30'],
+            'LastName'=> ['required','string','max:25'],
+            'age'=> ['required','integer','min:18'],
+            'weight'=> ['required','integer','max:200'],
+            'height'=> ['required','integer','max:250'],
+        ]);
+        $fighter = Fighters::create($data);
+        return response()->json($fighter,200);
     }
 
     /**

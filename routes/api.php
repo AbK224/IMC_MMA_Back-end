@@ -1,8 +1,7 @@
 <?php
-
+use App\Http\Controllers\Api\FighterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::get('/fighters',[FighterController::class,'index']);
+Route::post('/fighter',[FighterController::class,'store']);
