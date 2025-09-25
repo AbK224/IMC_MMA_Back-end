@@ -31,7 +31,15 @@ class FighterController extends Controller
      */
     public function show(string $id)
     {
-        
+        $data = $request->validate([
+            'FirstName'=> ['required','string','max:30'],
+            'LastName'=> ['required','string','max:25'],
+            'age'=> ['required','integer','min:18'],
+            'weight'=> ['required','integer','max:200'],
+            'height'=> ['required','integer','max:250'],
+        ]);
+        $fighter = Fighters::create($data);
+        return response()->json($fighter,200);
     }
 
     /**
