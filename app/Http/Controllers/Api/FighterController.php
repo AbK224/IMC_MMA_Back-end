@@ -13,8 +13,7 @@ class FighterController extends Controller
      */
     public function index()
     {
-        $fighters = Fighters::all();
-        return response()->json($fighters);
+        
 
     }
 
