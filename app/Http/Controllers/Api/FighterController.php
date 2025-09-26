@@ -11,27 +11,25 @@ class FighterController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $query = Fighter::query();
+        $query = Fighters::query();
 
         // Recherche plein texte sur prénom et nom
-        if ($search = $request->query('search')) {
+        if($request->has('search')){
+            $search = $request->input('search');
             $query->where(function($q) use ($search) {
-                $q->where('FirstName', 'like', "%$search%")
-                  ->orWhere('LastName', 'like', "%$search%");
+                $q->where('FirstName', 'LIKE', "%$search%")
+                  ->orWhere('LastName', 'LIKE', "%$search%");
             });
         }
 
         // Filtrage par catégorie d’IMC
-        if ($BMI_Category = $request->query('BMI_Category')) {
-            $query->where('BMI_Category', $BMI_Category);
+        if ($request->has('category') && $request->input('category') != '') {
+            $category = $request->input('category');
+            $query->where('BMI_Category','LIKE',"%$category%");
         }
 
-        // Filtrage par classe de poids
-        if ($MMA_Weight_class = $request->query('MMA_Weight_class')) {
-            $query->where('MMA_Weight_class', $MMA_Weight_class);
-        }
 
         return response()->json($query->get());
 
@@ -42,7 +40,15 @@ class FighterController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $data = $request->validate([
+            'FirstName'=> ['required','string','max:30'],
+            'LastName'=> ['required','string','max:25'],
+            'age'=> ['required','integer','min:18'],
+            'weight'=> ['required','integer','max:200'],
+            'height'=> ['required','integer','max:250'],
+        ]);
+        $fighter = Fighters::create($data);
+        return response()->json($fighter,200);
     }
 
     /**
