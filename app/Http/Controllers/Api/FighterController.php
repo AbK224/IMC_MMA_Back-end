@@ -11,9 +11,27 @@ class FighterController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        
+        $query = Fighters::query();
+
+        // Recherche plein texte sur prénom et nom
+        if($request->has('search')){
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('FirstName', 'LIKE', "%$search%")
+                  ->orWhere('LastName', 'LIKE', "%$search%");
+            });
+        }
+
+        // Filtrage par catégorie d’IMC
+        if ($request->has('category') && $request->input('category') != '') {
+            $category = $request->input('category');
+            $query->where('BMI_Category','LIKE',"%$category%");
+        }
+
+
+        return response()->json($query->get());
 
     }
 
