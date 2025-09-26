@@ -73,5 +73,23 @@ class FighterController extends Controller
     public function destroy(string $id)
     {
         //
+        $fighter = Fighters::find($id);
+        if(!$fighter){
+            return response() -> json(["message"=>"Le combattant ayant l'id $id n'existe pas"],404);
+        } else {
+                $fighter -> delete();
+                return response() -> json(["message"=>"Le combattant $id supprimé avec succès"]);
+        }
+    }
+
+    // Summary on fighters
+    public function summary() 
+    {
+        $toalfighters = Fighters::count(); // comptes le nombres de combattants
+        $averageBMI = Fighters::avg('BMI'); // calcul la moyenne des imc
+        return response() -> json([
+            "Nombres totales de combattants" => $toalfighters,
+            "La Moyenne des IMCs" => round($averageBMI,2)
+        ]);
     }
 }
