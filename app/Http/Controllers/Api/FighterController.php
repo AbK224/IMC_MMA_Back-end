@@ -13,10 +13,27 @@ class FighterController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $fighters = Fighters::all();
-        return response()->json($fighters);
+        $query = Fighters::query();
+
+        // Recherche plein texte sur prénom et nom
+        if($request->has('search')){
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('FirstName', 'LIKE', "%$search%")
+                  ->orWhere('LastName', 'LIKE', "%$search%");
+            });
+        }
+
+        // Filtrage par catégorie d’IMC
+        if ($request->has('category') && $request->input('category') != '') {
+            $category = $request->input('category');
+            $query->where('BMI_Category','LIKE',"%$category%");
+        }
+
+
+        return response()->json($query->get());
 
     }
 
@@ -84,5 +101,23 @@ class FighterController extends Controller
     public function destroy(string $id)
     {
         //
+        $fighter = Fighters::find($id);
+        if(!$fighter){
+            return response() -> json(["message"=>"Le combattant ayant l'id $id n'existe pas"],404);
+        } else {
+                $fighter -> delete();
+                return response() -> json(["message"=>"Le combattant $id supprimé avec succès"]);
+        }
+    }
+
+    // Summary on fighters
+    public function summary() 
+    {
+        $toalfighters = Fighters::count(); // comptes le nombres de combattants
+        $averageBMI = Fighters::avg('BMI'); // calcul la moyenne des imc
+        return response() -> json([
+            "Nombres totales de combattants" => $toalfighters,
+            "La Moyenne des IMCs" => round($averageBMI,2)
+        ]);
     }
 }
