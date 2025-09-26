@@ -64,4 +64,15 @@ class FighterController extends Controller
                 return response() -> json(["message"=>"Le combattant $id supprimé avec succès"]);
         }
     }
+
+    // Summary on fighters
+    public function summary() 
+    {
+        $toalfighters = Fighters::count(); // comptes le nombres de combattants
+        $averageBMI = Fighters::avg('BMI'); // calcul la moyenne des imc
+        return response() -> json([
+            "Nombres totales de combattants" => $toalfighters,
+            "La Moyenne des IMCs" => round($averageBMI,2)
+        ]);
+    }
 }
