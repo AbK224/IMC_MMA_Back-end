@@ -120,4 +120,16 @@ class FighterController extends Controller
             "La Moyenne des IMCs" => round($averageBMI,2)
         ]);
     }
+    public function greeting($id)
+    {
+       $fighter = Fighters::findOrFail($id);
+        $message =sprintf(
+            'Bienvenue %s %s à PFL Africa 201, du haut de vos %d an(s), vous allez pouvoir compétir chez les %s. Félicitations !',
+        $fighter->FirstName,
+        $fighter->LastName,
+        $fighter->age,
+        $fighter->MMA_Weight_class
+        );
+        return response()->json(['message' => $message],200);
+    }
 }
