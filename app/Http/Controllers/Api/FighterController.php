@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Fighters;
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
+
 
 class FighterController extends Controller
 {
@@ -65,6 +67,32 @@ class FighterController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $fighter = Fighters::find($id);
+        if(!$fighter){
+            return response() -> json([
+                "message"=>"Le combattant $id n'existe pas"],404);
+        }
+        // validation des données d'entrée
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'FirstName' => ['sometimes', 'string', 'max:30'],
+            'LastName' => ['sometimes', 'string', 'max:25'],
+            'age' => ['sometimes', 'integer', 'min:18'],
+            'weight' => ['sometimes', 'integer', 'max:200'],
+            'height' => ['sometimes', 'integer', 'max:250'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'Message' => 'Erreur de validation',
+                'Errors' => $validator->errors()
+            ], 422);
+        }
+        //  Mettre à jour les données du combattant
+        $fighter->update($validator->validated());
+        return response()->json([
+            'message' => 'Combattant mis à jour avec succès',
+            'data' => $fighter
+        ], 200);
+           
     }
 
     /**
