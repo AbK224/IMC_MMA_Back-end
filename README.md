@@ -59,3 +59,17 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+### LES ETAPES A SUIVRE POUR ACCEDER AU PROJET
+## 1- Accéder au projet
+git clone https://github.com/AbK224/IMC_MMA_Back-end
+
+## 2- Installation des dépendances ou composants
+composer install
+
+## 3- Demander le fichier .env au Capitaine Abou Koné (koneabou669@gmail.com)
+
+## 4- S'assurer que la base de données est créée et liée au projet
+
+
+

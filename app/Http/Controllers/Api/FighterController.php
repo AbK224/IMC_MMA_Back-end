@@ -18,7 +18,7 @@ class FighterController extends Controller
         $query = Fighters::query();
 
         // Recherche plein texte sur prénom et nom
-        if($request->has('search')){
+        if($request->has('search')){ 
             $search = $request->input('search');
             $query->where(function($q) use ($search) {
                 $q->where('FirstName', 'LIKE', "%$search%")
